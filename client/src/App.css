@@ -1,0 +1,9 @@
+body {
+  background-color: #fafafa;
+  font-family: Poppins;
+}
+
+.img_fluid {
+  max-width: 100%;
+  height: auto;
+}
