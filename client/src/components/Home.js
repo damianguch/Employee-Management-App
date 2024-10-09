@@ -7,6 +7,7 @@ const Home = () => {
   const [salary, setSalary] = useState(0);
 
   useEffect(() => {
+    //Fetching data from external source(Side Effect)
     axios
       .get('http://localhost:1337/adminCount')
       .then((res) => {
@@ -34,7 +35,7 @@ const Home = () => {
     <div className="container-fluid h-custom">
       <div className="row p-3 d-flex justify-content-around mt-3">
         <div className="col-lg-4 col-md-6 mb-4">
-          <div className="px-3 pt-2 pb-3 border shadow-sm bg-light h-100 mx-lg-2">
+          <div className="px-3 pt-2 pb-3 border shadow-sm bg-light h-100 mx-lg-2 custom-card">
             <div className="text-center pb-1">
               <h4>Admins</h4>
             </div>
@@ -45,7 +46,7 @@ const Home = () => {
           </div>
         </div>
         <div className="col-lg-4 col-md-6 mb-4">
-          <div className="px-3 pt-2 pb-3 border shadow-sm bg-light h-100 mx-lg-2">
+          <div className="px-3 pt-2 pb-3 border shadow-sm bg-light h-100 mx-lg-2 custom-card">
             <div className="text-center pb-1">
               <h4>Employees</h4>
             </div>
@@ -56,7 +57,7 @@ const Home = () => {
           </div>
         </div>
         <div className="col-lg-4 col-md-6 mb-4">
-          <div className="px-3 pt-2 pb-3 border shadow-sm bg-light h-100 mx-lg-2">
+          <div className="px-3 pt-2 pb-3 border shadow-sm bg-light h-100 mx-lg-2 custom-card">
             <div className="text-center pb-1">
               <h4>Salary</h4>
             </div>

@@ -10,6 +10,11 @@ const cors = require('cors');
 const app = express();
 const port = 1337;
 
+// node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+
+const SECRET_KEY =
+  '9bbfcb41fac77c526c39144a247bd1dfa2eea762a630ad746ff58c920e8e06f8';
+
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -117,7 +122,7 @@ app.delete('/employees/:id', (req, res) => {
   connection.query(sql, (err, result) => {
     if (err) return res.json({ Error: 'Delete employee error in sql' });
     return res.json({
-      Message: 'Employee Deleted!'
+      Status: 'Success'
     });
   });
 });
@@ -176,10 +181,7 @@ app.post('/employees', (req, res) => {
 
   connection.query(sql2, employeeData, (err, result) => {
     if (err) return res.json({ message: 'Enter Correct Details!' });
-    return res.json({
-      Message: 'Employee Created Successfully!',
-      Result: result
-    });
+    return res.json(result);
   });
 });
 
@@ -201,7 +203,7 @@ app.post('/login', (req, res) => {
         (err, response) => {
           if (err) return res.json({ Error: 'Password Error' });
           if (response) {
-            const token = jwt.sign({ role: 'admin' }, 'jwt-secret-key', {
+            const token = jwt.sign({ role: 'admin' }, SECRET_KEY, {
               expiresIn: '1d'
             });
             return res.json({

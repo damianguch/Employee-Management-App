@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import img_log from './img-log.jpg';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { setJwToken } from './Auth';
 
 const Login = () => {
   const [data, setData] = useState({
@@ -9,6 +10,7 @@ const Login = () => {
     password: ''
   });
   const [error, setError] = useState('');
+  const [token, setToken] = useState(null);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,18 +28,39 @@ const Login = () => {
 
     axios
       .post('http://localhost:1337/login', userData)
-      .then((response) => {
-        console.log(response);
-        if (response.data.Status === 'Success') {
-          navigate('/');
+      .then((res) => {
+        console.log(res);
+        if (res.data.Status === 'Success') {
+          console.log(res.data.Token);
+          setJwToken(res.data.Token);
+          setToken(res.data.Token);
+
+          // Dispatch a custom event to notify the Navbar component about the
+          // authentication status change.
+          window.dispatchEvent(new Event('authChange'));
         } else {
-          setError(response.data.Error);
+          setError(res.data.Error);
         }
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  // useEffect is typically used for side effects like data fetching after the
+  // component mounts.
+
+  // use useEffect to handle side effects related to navigation or other
+  // effects based on changes in state.
+
+  // With the below, we ensure that the navigation logic is separated from the
+  // login logic and handled reactively based on the token state change
+  useEffect(() => {
+    if (token) {
+      navigate('/');
+    }
+  }, [token, navigate]);
+
   return (
     <div className="container" style={{ paddingTop: 60 }}>
       <div className="container-fluid h-custom">
@@ -102,14 +125,14 @@ const Login = () => {
                 </a>
               </div>
               <div className="text-center text-lg-start mt-4 pt2">
-                <button className="btn btn-primary" type="submit">
+                <button className="btn btn-dark" type="submit">
                   Login
                 </button>
                 <p className="small fw-bold mt-2 pt-1">
                   Don't Have an Account Yet?{' '}
-                  <a className="link-danger" href="/signup">
+                  <Link className="link-secondary" to="/signup">
                     Sign Up
-                  </a>
+                  </Link>
                 </p>
               </div>
             </form>
